@@ -2,10 +2,10 @@
 
 void testAssert(int test, char * testName){
 	if (test == 0){
-		printf("%s failed.\n", testName); 
+		printf("# FAILED: %s failed.\n", testName); 
 	}
 	else if (test != 0){
-		printf("%s succeeded.\n", testName); 
+		printf("# PASSED: %s succeeded.\n", testName); 
 	}
 	else{
 		printf("Error in testAssert.\n");

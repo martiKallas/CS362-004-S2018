@@ -24,7 +24,7 @@ int checkShuffle(struct gameState *cur, struct gameState *old, int curPlayer, in
 	//Check all other players states have not changed
 	int check = 0;
 	int fail = 0;
-	int success = 0;
+	int success = 1;
 	int playerAttrs[PLAYER_ATTR_NUM] = {0};
 	int player;
 	int i;
@@ -104,6 +104,6 @@ int main(){
 	//shuffle
 	shuffle(currentPlayer, game);
 	ok = checkShuffle(game, &saveState, currentPlayer, MAX_DECK);
-	testAssert(ok, "# PASSED: fill deck with MAX_DECK unique cards");
+	testAssert(ok, "Fill deck with MAX_DECK unique cards");
 	return 0;
 }
