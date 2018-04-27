@@ -42,8 +42,10 @@ enum PLAYER_ATTRIBUTE{
 
 /* Description: if test is 0, prints "<testName> failed"
  * 	If test is not 0, prints "<testName> succeeded"
+ * 	Returns 1 if test is true. Returns 0 otherwise.
+ * 	Returns -1 in case of error.
  */
-void testAssert(int test, char * testName);
+int testAssert(int test, char * testName);
 
 /* Description: Returns 0 if hand of player is identical in
  * 	cur and old. Returns other numbers depending on point of failure
@@ -115,7 +117,11 @@ int otherStateChanged(struct gameState* cur, struct gameState* old, int stateAtt
  * Preconditions: All indices in playerAttrs must be 0 to affect return value.
  * Postconditions: playerAttrs will be set to difference of cur - old.
  */
-int checkPlayerChanged(struct gameState* cur, struct gameState* old, int playerAttrs[PLAYER_ATTR_NUM], int player, int printFail);
+int checkPlayerChanged(	struct gameState* cur, 
+			struct gameState* old, 
+			int playerAttrs[PLAYER_ATTR_NUM], 
+			int player, 
+			int printFail);
 
 /* Description: Determines if deck contains same count of cards between cur and old.
  * 	Uses hash counting to increment countArr[card] for each card in deck[player][].
@@ -126,4 +132,14 @@ int checkPlayerChanged(struct gameState* cur, struct gameState* old, int playerA
  * Postconditions: countArr[card] contains difference cur - old for card value
  */
 int deckCardsChanged(struct gameState* cur, struct gameState* old, int player, int size, int *countArr);
+
+/* Description: Runs checkPlayerChanged on all players except for curPlayer.
+ * 	Returns 0 if no change or 1 if change.
+ */
+int otherPlayersChanged(struct gameState* cur, 
+			struct gameState* old, 
+			int playerAttrs[PLAYER_ATTR_NUM], 
+			int curPlayer, 
+			int numPlayers,
+			int printFail);
 #endif

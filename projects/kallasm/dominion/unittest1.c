@@ -23,11 +23,10 @@
 int checkShuffle(struct gameState *cur, struct gameState *old, int curPlayer, int cardTypes){
 	//Check all other players states have not changed
 	int check = 0;
-	int fail = 0;
 	int success = 1;
 	int playerAttrs[PLAYER_ATTR_NUM] = {0};
-	int player;
 	int i;
+/*
 	for (i = 1; i < NUM_PLAYERS; i++){
 		player = (i + curPlayer)%(NUM_PLAYERS);	
 		check = checkPlayerChanged(cur, old, playerAttrs, player, PRINT);
@@ -36,6 +35,8 @@ int checkShuffle(struct gameState *cur, struct gameState *old, int curPlayer, in
 	if (!fail) printf("  PASS: All other player's states are unchanged.\n");
 	else success = 0;
 	fail = 0;
+*/
+	if (otherPlayersChanged(cur, old, playerAttrs, curPlayer, NUM_PLAYERS, PRINT)) success = 0;
 
 	//Check other cur states:
 	int stateAttrs[STATE_ATTR_NUM] = {0};
@@ -85,11 +86,12 @@ int main(){
 	struct gameState * game = &g;
 	memset(game, 0, sizeof(struct gameState));
 	int ok = 0;
+	int passed = 1;
 	
 	//NUM_PLAYERS, kingdomCards, randomSeed, gameState *
 	initializeGame(NUM_PLAYERS, kCards, SEED, game);
 	int currentPlayer = whoseTurn(game);
-	printf("\n\n######### Beginning Test of shuffle()############\n");
+	printf("\n\n\n\n######### Beginning Test of shuffle()############\n");
 
 	printf("\n# Fill deck with MAX_DECK unique cards\n");
 	//Fill deck with cards 0 to MAX_DECK-1
@@ -100,10 +102,35 @@ int main(){
 		g.deckCount[currentPlayer]++;	
 	}
 	struct gameState saveState = g;
-	
 	//shuffle
 	shuffle(currentPlayer, game);
 	ok = checkShuffle(game, &saveState, currentPlayer, MAX_DECK);
-	testAssert(ok, "Fill deck with MAX_DECK unique cards");
+	ok = testAssert(ok, "Fill deck with MAX_DECK unique cards");
+	if (!ok) passed = 0;
+
+	//Test shuffle on starting deck
+	printf("\n\n# Shuffle deck after initializeGame - contains only copper and estate\n");
+	initializeGame(NUM_PLAYERS, kCards, SEED, game);
+	saveState = g;
+	shuffle(currentPlayer, game);
+	ok = checkShuffle(game, &saveState, currentPlayer, treasure_map);
+	ok = testAssert(ok, "Shuffle starting deck");
+	if (!ok) passed = 0;
+
+	//Test shuffle 0 cards:
+	printf("\n\n# Shuffle deck of 0 cards\n");
+	initializeGame(NUM_PLAYERS, kCards, SEED, game);
+	//int tempCount = g.deckCount[currentPlayer];
+	g.deckCount[currentPlayer] = 0; //shuffle 0 deck count
+	saveState = g;
+	ok = shuffle(currentPlayer, game);
+	if (ok == -1) printf("  PASS: shuffle returned -1 on 0 deck count.\n");
+	else printf("  FAIL: shuffle did not return -1 on 0 deck count.\n");
+	int check = (ok == -1 && checkShuffle(game, &saveState, currentPlayer, treasure_map));
+	testAssert(check, "Shuffle 0 cards");
+	if (!ok) passed = 0;
+
+	if (passed) printf("\n ########## PASSED Test of shuffle() ##########\n");
+	
 	return 0;
 }

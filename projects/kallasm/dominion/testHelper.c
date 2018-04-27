@@ -1,14 +1,17 @@
 #include "testHelper.h"
 
-void testAssert(int test, char * testName){
+int testAssert(int test, char * testName){
 	if (test == 0){
-		printf("# FAILED: %s failed.\n", testName); 
+		printf("#   FAIL: %s failed.\n", testName); 
+		return 0;
 	}
 	else if (test != 0){
 		printf("# PASSED: %s succeeded.\n", testName); 
+		return 1;
 	}
 	else{
 		printf("Error in testAssert.\n");
+		return -1;
 	}
 }
 
@@ -113,7 +116,7 @@ int otherStateChanged(struct gameState* cur, struct gameState* old, int stateAtt
 				if (!stateAttrs[i] && diff){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: numPlayers changed. Difference: %d.\n", diff);
+						"  FAIL: numPlayers changed. Difference: %d.\n", diff);
 					}
 				}
 				stateAttrs[i] = diff; 
@@ -123,7 +126,7 @@ int otherStateChanged(struct gameState* cur, struct gameState* old, int stateAtt
 				if (!stateAttrs[i] && diff){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: outpostPlayed changed. Difference: %d.\n", diff);
+						"  FAIL: outpostPlayed changed. Difference: %d.\n", diff);
 					}
 				}
 				stateAttrs[i] = diff; 
@@ -133,7 +136,7 @@ int otherStateChanged(struct gameState* cur, struct gameState* old, int stateAtt
 				if (!stateAttrs[i] && diff){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: outpostTurn changed. Difference: %d.\n", diff);
+						"  FAIL: outpostTurn changed. Difference: %d.\n", diff);
 					}
 				}
 				stateAttrs[i] = diff; 
@@ -143,7 +146,7 @@ int otherStateChanged(struct gameState* cur, struct gameState* old, int stateAtt
 				if (!stateAttrs[i] && diff){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: whoseTurn changed. Difference: %d.\n", diff);
+						"  FAIL: whoseTurn changed. Difference: %d.\n", diff);
 					}
 				}
 				stateAttrs[i] = diff; 
@@ -153,7 +156,7 @@ int otherStateChanged(struct gameState* cur, struct gameState* old, int stateAtt
 				if (!stateAttrs[i] && diff){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: phse changed. Difference: %d.\n", diff);
+						"  FAIL: phse changed. Difference: %d.\n", diff);
 					}
 				}
 				stateAttrs[i] = diff; 
@@ -163,7 +166,7 @@ int otherStateChanged(struct gameState* cur, struct gameState* old, int stateAtt
 				if (!stateAttrs[i] && diff){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: numActions changed. Difference: %d.\n", diff);
+						"  FAIL: numActions changed. Difference: %d.\n", diff);
 					}
 				}
 				stateAttrs[i] = diff; 
@@ -173,7 +176,7 @@ int otherStateChanged(struct gameState* cur, struct gameState* old, int stateAtt
 				if (!stateAttrs[i] && diff){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: coins changed. Difference: %d.\n", diff);
+						"  FAIL: coins changed. Difference: %d.\n", diff);
 					}
 				}
 				stateAttrs[i] = diff; 
@@ -183,7 +186,7 @@ int otherStateChanged(struct gameState* cur, struct gameState* old, int stateAtt
 				if (!stateAttrs[i] && diff){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: numBuys changed. Difference: %d.\n", diff);
+						"  FAIL: numBuys changed. Difference: %d.\n", diff);
 					}
 				}
 				stateAttrs[i] = diff; 
@@ -193,7 +196,7 @@ int otherStateChanged(struct gameState* cur, struct gameState* old, int stateAtt
 				if (!stateAttrs[i] && diff){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: playedCardCount changed. Difference: %d.\n", diff);
+						"  FAIL: playedCardCount changed. Difference: %d.\n", diff);
 					}
 				}
 				stateAttrs[i] = diff; 
@@ -221,14 +224,14 @@ int checkPlayerChanged(struct gameState* cur, struct gameState* old, int playerA
 				if (!playerAttrs[pa_hand] && (diff > 0)){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: Cards in player %d's hand are different at index %d.\n",
+						"  FAIL: Cards in player %d's hand are different at index %d.\n",
 						player, (diff-1));	
 					}
 				}
 				if (!playerAttrs[pa_handCount] && (diff < 0)){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: Number of cards in player %d's hand have changed.\n",
+						"  FAIL: Number of cards in player %d's hand have changed.\n",
 						player);
 					}
 				}
@@ -245,14 +248,14 @@ int checkPlayerChanged(struct gameState* cur, struct gameState* old, int playerA
 				if (!playerAttrs[pa_deck] && (diff > 0)){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: Cards in player %d's deck are different at index %d.\n",
+						"  FAIL: Cards in player %d's deck are different at index %d.\n",
 						player, (diff-1));	
 					}
 				}
 				if (!playerAttrs[pa_deckCount] && (diff < 0)){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: Number of cards in player %d's deck have changed.\n",
+						"  FAIL: Number of cards in player %d's deck have changed.\n",
 						player);
 					}
 				}
@@ -269,14 +272,14 @@ int checkPlayerChanged(struct gameState* cur, struct gameState* old, int playerA
 				if (!playerAttrs[pa_discard] && (diff > 0)){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: Cards in player %d's discard are different at index %d.\n",
+						"  FAIL: Cards in player %d's discard are different at index %d.\n",
 						player, (diff-1));	
 					}
 				}
 				if (!playerAttrs[pa_discardCount] && (diff < 0)){
 					change = 1;
 					if (printFail){ printf(
-						"FAILED: Number of cards in player %d's discard have changed.\n",
+						"  FAIL: Number of cards in player %d's discard have changed.\n",
 						player);
 					}
 				}
@@ -329,3 +332,21 @@ int deckCardsChanged(struct gameState* cur, struct gameState* old, int player, i
 
 	return change;
 }	
+
+int otherPlayersChanged(struct gameState* cur, 
+			struct gameState* old, 
+			int playerAttrs[PLAYER_ATTR_NUM], 
+			int curPlayer, 
+			int numPlayers, 
+			int printFail){
+	int change = 0;
+	int i;
+	int player;
+	for (i = 1; i < numPlayers; i++){
+		player = (i + curPlayer)%numPlayers;
+		if (checkPlayerChanged(cur, old, playerAttrs, player, printFail)) change = 1;
+	}
+	if (!change) printf("  PASS: All other player's states are unchanged. \n");
+	else printf("  FAIL: Changes detected in other player's states.\n");
+	return change;
+}
