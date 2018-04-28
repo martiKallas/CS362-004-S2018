@@ -127,6 +127,7 @@ int checkPlayerChanged(	struct gameState* cur,
  * 	Uses hash counting to increment countArr[card] for each card in deck[player][].
  * 	Returns index of first difference in countArr if there is a difference.
  * 	Returns 0 if no differences found.
+ * 	size indicates max value of cards that can be found in deck (by card type not quantity)
  * Preconditions: countArr is an array initialized to all 0 and of size, size.
  * 	deckCount should be accurate for both cur and old. 
  * Postconditions: countArr[card] contains difference cur - old for card value
@@ -142,4 +143,45 @@ int otherPlayersChanged(struct gameState* cur,
 			int curPlayer, 
 			int numPlayers,
 			int printFail);
+
+/* Description: Determines if cards in hand have changed.
+ * 	Similar to deckCardsChanged. Uses hash counting to increment countArr for each card in deck[player][]
+ * 	Returns index of first difference in countArr if there is a difference.
+ * 	Returns 0 if no differences found.
+ * 	size = size of countArr, should be max card value for hash counting
+ * 	Can ignore a card with the ignore flag. This will check all cards have changed except for that card
+ * 		Set ignore to -1 to check all card values
+ * Preconditions: countArr is initialized to all 0
+ * 	handCount should be accurate for both cur and old
+ * Postconditions: countArr[card] contains difference cur - old for card value
+ */
+int cardInHandChange(	struct gameState* cur, 
+			struct gameState* old, 
+			int player, 
+			int *countArr, 
+			int size, 
+			int ignore);
+
+/* Description: Determines if cards in discard have changed.
+ * 	Similar to deckCardsChanged. Uses hash counting to increment countArr for each card in deck[player][]
+ * 	Returns index of first difference in countArr if there is a difference.
+ * 	Returns 0 if no differences found.
+ * 	size = size of countArr, should be max card value for hash counting
+ * 	Can ignore a card with the ignore flag. This will check all cards have changed except for that card
+ * 		Set ignore to -1 to check all card values
+ * Preconditions: countArr is initialized to all 0
+ * 	discardCount should be accurate for both cur and old
+ * Postconditions: countArr[card] contains difference cur - old for card value
+ */
+int cardInDiscardChange(struct gameState* cur, 
+			struct gameState* old, 
+			int player, 
+			int *countArr, 
+			int size, 
+			int ignore);
+
+/* Description: Returns 1 if there is any change to the game state. Returns 0 otherwise.
+ */
+int anyChange(struct gameState* cur, struct gameState* old, int numPlayers, int printFail);
+
 #endif

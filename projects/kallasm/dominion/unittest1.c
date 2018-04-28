@@ -131,6 +131,6 @@ int main(){
 	if (!ok) passed = 0;
 
 	if (passed) printf("\n ########## PASSED Test of shuffle() ##########\n");
-	
+	else printf("\n ########## FAILED Test of shuffle() ##########\n");
 	return 0;
 }

@@ -156,7 +156,7 @@ int otherStateChanged(struct gameState* cur, struct gameState* old, int stateAtt
 				if (!stateAttrs[i] && diff){
 					change = 1;
 					if (printFail){ printf(
-						"  FAIL: phse changed. Difference: %d.\n", diff);
+						"  FAIL: phase changed. Difference: %d.\n", diff);
 					}
 				}
 				stateAttrs[i] = diff; 
@@ -349,4 +349,94 @@ int otherPlayersChanged(struct gameState* cur,
 	if (!change) printf("  PASS: All other player's states are unchanged. \n");
 	else printf("  FAIL: Changes detected in other player's states.\n");
 	return change;
+}	
+
+int cardInHandChange(struct gameState* cur, struct gameState* old, int player, int *countArr, int size, int ignore){
+	int i;
+	int card = 0;
+	int change = 0;
+	//add cards in current state
+	for (i = 0; i < cur->handCount[player]; i++){
+		card = cur->hand[player][i];
+		if (card > (size-1)){
+			printf("!!!!!!!!!! ERRROR IN cardInHandChange() !!!!!!!!!!!!\n");
+			printf("Card value %d, larger than size %d, for player %d in current game state.\n", card, size, player);
+			exit(EXIT_FAILURE);
+		}	
+		countArr[card]++;
+	}		
+	//subtract cards in old state
+	for (i = 0; i < old->handCount[player]; i++){
+		card = old->hand[player][i];
+		if (card > (size-1)){
+			printf("!!!!!!!!!! ERRROR IN cardInHandChange() !!!!!!!!!!!!\n");
+			printf("Card value %d, larger than size %d, for player %d in old game state.\n", card, size, player);
+			exit(EXIT_FAILURE);
+		}	
+		countArr[card]--;
+	}		
+	//look for changes
+	for (i=0; i < size; i++){
+		if (countArr[i] && i != ignore){
+			change = i;
+			break;
+		}
+	}	
+
+	return change;
+}	
+
+
+int cardInDiscardChange(struct gameState* cur, struct gameState* old, int player, int *countArr, int size, int ignore){
+	int i;
+	int card = 0;
+	int change = 0;
+	//add cards in current state
+	for (i = 0; i < cur->discardCount[player]; i++){
+		card = cur->discard[player][i];
+		if (card > (size-1)){
+			printf("!!!!!!!!!! ERRROR IN cardInHandChange() !!!!!!!!!!!!\n");
+			printf("Card value %d, larger than size %d, for player %d in current game state.\n", card, size, player);
+			exit(EXIT_FAILURE);
+		}	
+		countArr[card]++;
+	}		
+	//subtract cards in old state
+	for (i = 0; i < old->discardCount[player]; i++){
+		card = old->discard[player][i];
+		if (card > (size-1)){
+			printf("!!!!!!!!!! ERRROR IN cardInHandChange() !!!!!!!!!!!!\n");
+			printf("Card value %d, larger than size %d, for player %d in old game state.\n", card, size, player);
+			exit(EXIT_FAILURE);
+		}	
+		countArr[card]--;
+	}		
+	//look for changes
+	for (i=0; i < size; i++){
+		if (countArr[i] && i != ignore){
+			change = i;
+			break;
+		}
+	}	
+	return change;
+}	
+
+int anyChange(struct gameState* cur, struct gameState* old, int numPlayers, int printFail){
+	int i;
+	int check = 0;
+	int change = 0;
+	int* pAttr = calloc(PLAYER_ATTR_NUM, sizeof(int));
+	//Check all states of each player
+	for (i = 0; i < numPlayers; i++){
+		check = checkPlayerChanged(cur, old, pAttr, i, printFail);
+		if(check) change = 1;
+	}
+	free(pAttr);
+
+	//Check all non-player-indexed states
+	int* sAttr = calloc(STATE_ATTR_NUM, sizeof(int));
+	check = otherStateChanged(cur, old, sAttr, printFail);
+	if (check) change = 1;
+	free(sAttr);
+	return change;	
 }
