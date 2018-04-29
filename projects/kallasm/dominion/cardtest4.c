@@ -96,8 +96,8 @@ int main(){
 	ok = otherPlayersChanged(game, &saveState, plyrAttr, currentPlayer, NUM_PLAYERS, PRINT);
 	if (ok) passed = 0;
 
-	if (passed) printf("\n ########## PASSED Test of sea hag ##########\n");
-	else printf("\n ########## FAILED Test of sea hag ##########\n");
+	if (passed) printf("\n ########## PASSED Test of sea hag ##########\n\n\n\n");
+	else printf("\n ########## FAILED Test of sea hag ##########\n\n\n\n");
 
 	free(plyrAttr);
 	free(countArr);
