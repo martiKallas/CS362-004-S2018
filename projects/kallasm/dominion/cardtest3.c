@@ -64,9 +64,9 @@ int main(){
 		passed = 0;
 	}
 	else printf("  PASS: Hand contained an extra feast.\n");
-	//check num actions hasn't changed: -1 to play card, +1 from card
+	//check num actions is +2 : cardEffect is not responsible for removing action on play
 	count = g.numActions - saveState.numActions;
-	if(count != 1){
+	if(count != 2){
 		passed = 0;
 		printf("  FAIL: Actions change: %d.\n", count);
 	}
