@@ -120,6 +120,8 @@ int endTurn(struct gameState *state);
 
 int isGameOver(struct gameState *state);
 
+int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus);
+
 int scoreFor(int player, struct gameState *state);
 /* Negative here does not mean invalid; scores may be negative,
    -9999 means invalid input */

@@ -3,6 +3,7 @@
  * Date: 4/26/2018
  */
 #ifndef MK_TESTHELPER_H
+#define MK_TESTHELPER_H
 #include <stdio.h>
 #include <stdlib.h>
 #include "dominion.h"
@@ -11,6 +12,7 @@
 
 #define STATE_ATTR_NUM 9
 #define PLAYER_ATTR_NUM 6
+#define PC_TEST_NUM 4
 
 //Used to track non-player-specific attributes in gameState struct
 //	enums are variable name in gameState struct prepended with sa_
@@ -38,6 +40,13 @@ enum PLAYER_ATTRIBUTE{
 	pa_deckCount,
 	pa_discard,
 	pa_discardCount
+};
+
+enum PLAY_CARD_TESTS{
+	pc_handCardCount = 0,
+	pc_handCount,
+	pc_playedCardCount,
+	pc_playedCount
 };
 
 /* Description: if test is 0, prints "<testName> failed"
@@ -146,7 +155,7 @@ int otherPlayersChanged(struct gameState* cur,
 
 /* Description: Determines if cards in hand have changed.
  * 	Similar to deckCardsChanged. Uses hash counting to increment countArr for each card in deck[player][]
- * 	Returns index of first difference in countArr if there is a difference.
+ * 	Returns index of last difference in countArr if there is a difference.
  * 	Returns 0 if no differences found.
  * 	size = size of countArr, should be max card value for hash counting
  * 	Can ignore a card with the ignore flag. This will check all cards have changed except for that card
@@ -163,7 +172,7 @@ int cardInHandChange(	struct gameState* cur,
 			int ignore);
 
 /* Description: Determines if cards in discard have changed.
- * 	Similar to deckCardsChanged. Uses hash counting to increment countArr for each card in deck[player][]
+ * 	Similar to deckCardsChanged. Uses hash counting to increment countArr for each card in discard[player][]
  * 	Returns index of first difference in countArr if there is a difference.
  * 	Returns 0 if no differences found.
  * 	size = size of countArr, should be max card value for hash counting
@@ -180,8 +189,43 @@ int cardInDiscardChange(struct gameState* cur,
 			int size, 
 			int ignore);
 
+
+/* Description: Determines if cards in played have changed.
+ * 	Similar to deckCardsChanged. Uses hash counting to increment countArr for each card in playedCards
+ * 	Returns index of first difference in countArr if there is a difference.
+ * 	Returns 0 if no differences found.
+ * 	size = size of countArr, should be max card value for hash counting
+ * 	Can ignore a card with the ignore flag. This will check all cards have changed except for that card
+ * 		Set ignore to -1 to check all card values
+ * Preconditions: countArr is initialized to all 0
+ * 	playedCount should be accurate for both cur and old
+ * Postconditions: countArr[card] contains difference cur - old for card value
+ */
+int cardInPlayedChange(	struct gameState* cur, 
+			struct gameState* old, 
+			int *countArr, 
+			int size, 
+			int ignore);
+
 /* Description: Returns 1 if there is any change to the game state. Returns 0 otherwise.
  */
 int anyChange(struct gameState* cur, struct gameState* old, int numPlayers, int printFail);
+
+/* Description: Checks the basics of playing a card from hand. Returns 0 indicating OK or
+ * 	a number indicating the last found point of failure. The below numbers also represent 
+ * 	index + 1 for countArr for the corresponding properties:
+ * 		1: Hand does not have -1 count
+ * 		2: Hand does not have -1 count of specified card
+ * 		3: Played card count is not +1
+ * 		4: Played card does not contain +1 of played card	
+ * 	User enters 1 in countArr to ignore specified test. Returns 0 even if there is a change
+ * 	in an ignored test.
+ * 	countArr contains the difference cur - old of the specified attributes
+ * 	cardMax is the max value of cards
+ * Preconditions: countArr values are all 0 or 1
+ * Postconditions: countArr values are cur.<property> - old.<property>
+ */
+int cardPlayedBasics(struct gameState* cur, struct gameState* old, int card, 
+			int countArr[PC_TEST_NUM], int cardMax, int printFail);
 
 #endif

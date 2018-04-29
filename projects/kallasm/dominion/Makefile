@@ -6,7 +6,7 @@ rngs.o: rngs.h rngs.c
 dominion.o: dominion.h dominion.c rngs.o
 	gcc -c dominion.c -g  $(CFLAGS)
 
-testHelper.o: testHelper.h testHelper.c
+testHelper.o: testHelper.h testHelper.c dominion.o interface.o rngs.o
 	gcc -c testHelper.c -g $(CFLAGS)
 
 playdom: dominion.o playdom.c
@@ -41,6 +41,18 @@ unittest1: unittest1.c dominion.o interface.o rngs.o testHelper.o
 
 unittest2: unittest2.c dominion.o interface.o rngs.o testHelper.o
 	gcc -o unittest2 unittest2.c -g dominion.o rngs.o interface.o testHelper.o $(CFLAGS)
+
+unittest3: unittest3.c dominion.o interface.o rngs.o testHelper.o
+	gcc -o unittest3 unittest3.c -g dominion.o rngs.o interface.o testHelper.o $(CFLAGS)
+
+unittest4: unittest4.c dominion.o interface.o rngs.o testHelper.o
+	gcc -o unittest4 unittest4.c -g dominion.o rngs.o interface.o testHelper.o $(CFLAGS)
+
+cardtest1: cardtest1.c dominion.o interface.o rngs.o testHelper.o
+	gcc -o cardtest1 cardtest1.c -g dominion.o rngs.o interface.o testHelper.o $(CFLAGS)
+
+cardtest2: cardtest2.c dominion.o interface.o rngs.o testHelper.o
+	gcc -o cardtest2 cardtest2.c -g dominion.o rngs.o interface.o testHelper.o $(CFLAGS)
 
 all: playdom player 
 

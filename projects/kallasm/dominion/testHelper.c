@@ -395,7 +395,7 @@ int cardInDiscardChange(struct gameState* cur, struct gameState* old, int player
 	for (i = 0; i < cur->discardCount[player]; i++){
 		card = cur->discard[player][i];
 		if (card > (size-1)){
-			printf("!!!!!!!!!! ERRROR IN cardInHandChange() !!!!!!!!!!!!\n");
+			printf("!!!!!!!!!! ERRROR IN cardInDiscardChange() !!!!!!!!!!!!\n");
 			printf("Card value %d, larger than size %d, for player %d in current game state.\n", card, size, player);
 			exit(EXIT_FAILURE);
 		}	
@@ -405,7 +405,7 @@ int cardInDiscardChange(struct gameState* cur, struct gameState* old, int player
 	for (i = 0; i < old->discardCount[player]; i++){
 		card = old->discard[player][i];
 		if (card > (size-1)){
-			printf("!!!!!!!!!! ERRROR IN cardInHandChange() !!!!!!!!!!!!\n");
+			printf("!!!!!!!!!! ERRROR IN cardInDiscardChange() !!!!!!!!!!!!\n");
 			printf("Card value %d, larger than size %d, for player %d in old game state.\n", card, size, player);
 			exit(EXIT_FAILURE);
 		}	
@@ -420,6 +420,41 @@ int cardInDiscardChange(struct gameState* cur, struct gameState* old, int player
 	}	
 	return change;
 }	
+
+int cardInPlayedChange(struct gameState* cur, struct gameState* old, int *countArr, int size, int ignore){
+	int i;
+	int card = 0;
+	int change = 0;
+	//add cards in current state
+	for (i = 0; i < cur->playedCardCount; i++){
+		card = cur->playedCards[i];
+		if (card > (size-1)){
+			printf("!!!!!!!!!! ERRROR IN cardInPlayedChange() !!!!!!!!!!!!\n");
+			printf("Card value %d, larger than size %d, in current game state.\n", card, size);
+			exit(EXIT_FAILURE);
+		}	
+		countArr[card]++;
+	}		
+	//subtract cards in old state
+	for (i = 0; i < old->playedCardCount; i++){
+		card = old->playedCards[i];
+		if (card > (size-1)){
+			printf("!!!!!!!!!! ERRROR IN cardInPlayedChange() !!!!!!!!!!!!\n");
+			printf("Card value %d, larger than size %d, in old game state.\n", card, size);
+			exit(EXIT_FAILURE);
+		}	
+		countArr[card]--;
+	}		
+	//look for changes
+	for (i=0; i < size; i++){
+		if (countArr[i] && i != ignore){
+			change = i;
+			break;
+		}
+	}	
+	return change;
+}	
+
 
 int anyChange(struct gameState* cur, struct gameState* old, int numPlayers, int printFail){
 	int i;
@@ -438,5 +473,80 @@ int anyChange(struct gameState* cur, struct gameState* old, int numPlayers, int 
 	check = otherStateChanged(cur, old, sAttr, printFail);
 	if (check) change = 1;
 	free(sAttr);
+	return change;	
+}
+
+int cardPlayedBasics(	struct gameState* cur, struct gameState* old, 
+			int card, int countArr[PC_TEST_NUM], int cardMax, int printFail){
+	int i;
+	int change = 0;
+	int diff = 0;
+	int currentPlayer = whoseTurn(cur);
+	int* cArr = calloc(cardMax, sizeof(int));
+	for(i = 0; i < PC_TEST_NUM; i++){
+		switch (i){
+			//Check card count of card is -1 in hand
+			case pc_handCardCount:
+				cardInHandChange(cur, old, currentPlayer, cArr, cardMax, -1); 
+				diff = cArr[card];
+				if (!countArr[i] && diff != -1){
+					change = 1;
+					if (printFail){ printf(
+						"  FAIL: Card %d count changed by %d in hand.\n", card, diff);
+					}
+				}
+				else if (!countArr[i] && printFail){
+					printf("  PASS: Card %d quantity reduced by 1 in hand.\n", card);
+				}
+				free(cArr);
+				countArr[i] = diff; 
+				break;
+			//Check hand count is -1
+			case pc_handCount:
+				diff = cur->handCount[currentPlayer] - old->handCount[currentPlayer];
+				if (!countArr[i] && diff != -1){
+					change = 1;
+					if (printFail){
+						printf("  FAIL: Hand count change is %d.\n", diff);
+					}
+				}
+				else if (!countArr[i] && printFail){
+					printf("  PASS: Hand count reduced by 1.\n");
+				}
+				countArr[i] = diff;
+				break;
+			//Check card count of card is +1 in playedCards
+			case pc_playedCardCount:
+				cArr = calloc(cardMax, sizeof(int));
+				cardInPlayedChange(cur, old, cArr, cardMax, -1); 
+				diff = cArr[card];
+				if (!countArr[i] && diff != 1){
+					change = 1;
+					if (printFail){ printf(
+						"  FAIL: Card %d count changed by %d in playedCards.\n", card, diff);
+					}
+				}
+				else if (!countArr[i] && printFail){
+					printf("  PASS: Card %d quantity increased by 1 in playedCards.\n", card);
+				}
+				free(cArr);
+				countArr[i] = diff; 
+				break;
+			//Check played count is +1
+			case pc_playedCount:
+				diff = cur->playedCardCount - old->playedCardCount;
+				if (!countArr[i] && diff != 1){
+					change = 1;
+					if (printFail){
+						printf("  FAIL: Played card count change is %d.\n", diff);
+					}
+				}
+				else if (!countArr[i] && printFail){
+					printf("  PASS: Played card count increased by 1.\n");
+				}
+				countArr[i] = diff;
+				break;
+		}//switch
+	}//for loop
 	return change;	
 }

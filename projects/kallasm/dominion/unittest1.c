@@ -1,9 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "testHelper.h"
-#include "dominion.h"
-#include "interface.h"
-#include "rngs.h"
 #include <stdio.h>
 
 #define SEED 10
