@@ -3,12 +3,12 @@
 #include<stdlib.h>
 #include<time.h>
 
-//Random char has a one in 10 chance of selecting one of the expected
-//	char inputs or choosing a random char from ' ' to '~'
+//Selects a random character. 9/200 selections are guaranteed to
+//	be one of the state changing characters.
 char inputChar()
 {
     char inputs[9] = {'[','(','{',' ','a','x','}',')',']'};
-    int r = rand()%100;
+    int r = rand()%200;
     char ret = 'z';
     if(r < 9){
 	//choose one of special inputs
@@ -44,16 +44,18 @@ char *randstring(size_t length) {
     return randomString;
 }
 
+//Has a 1 in 100 chance of selecting the correct phrase to trigger the target line
+//	otherwise, returns a random string from 1 to 15 characters
 char *inputString()
 {
     int choice = rand()%100;
     char *string = NULL;
-    if (choice == 99){
+    if (choice == 0){
 	string = malloc(sizeof(char)*6);
 	strcpy(string, "reset");
     }
     else{
-	choice = choice % 10 + 1; //no strings longer than length 10
+	choice = choice % 15 + 1; //no strings longer than length 15
 	string = randstring(choice);
     }
     return string;
