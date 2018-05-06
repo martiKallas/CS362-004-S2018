@@ -24,19 +24,23 @@ char inputChar()
 //Source: https://codereview.stackexchange.com/questions/29198/random-string-generator-in-c
 char *randstring(size_t length) {
 
+    //these are the set of possible characters for use in the random string
     static char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.-#'?![]{}()";        
     char *randomString = NULL;
 
     if (length) {
+	//designate memory for the string
         randomString = malloc(sizeof(char) * (length +1));
 
+	//select a random char from charset for each position in randomString
         if (randomString) {            
 	    int n;
             for (n = 0;n < length;n++) {            
+		//make sure key falls within range of charset
                 int key = rand() % (int)(sizeof(charset) -1);
                 randomString[n] = charset[key];
             }
-
+	    //add the null terminator
             randomString[length] = '\0';
         }
     }
