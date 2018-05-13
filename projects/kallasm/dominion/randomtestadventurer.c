@@ -59,8 +59,8 @@ int main(){
 		//playadventurer
 		cardEffect(adventurer, 0, 0, 0, g, handPos, NULL);
 		//Confirm card count is the same:
-		totalG = gs.handCount[player] + gs.deckCount[player] + gs.discardCount[player];
-		totalS = save.handCount[player] + save.handCount[player] + save.handCount[player];
+		totalG = gs.handCount[player] + gs.deckCount[player] + gs.discardCount[player] + gs.playedCardCount;
+        totalS = save.handCount[player] + save.deckCount[player] + save.discardCount[player] + save.playedCardCount;
 		if (totalG == totalS){
 			strcat(pass, "Total card count, ");
 		}

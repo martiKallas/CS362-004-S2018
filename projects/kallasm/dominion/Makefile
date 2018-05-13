@@ -24,16 +24,22 @@ rta: randomtestadventurer.c dominion.o interface.o rngs.o testHelper.o
 rt1: randomtestcard1.c dominion.o interface.o rngs.o testHelper.o
 	gcc -o rt1 randomtestcard1.c -g dominion.o rngs.o interface.o testHelper.o $(CFLAGS)
 
+rt2: randomtestcard2.c dominion.o interface.o rngs.o testHelper.o
+	gcc -o rt2 randomtestcard2.c -g dominion.o rngs.o interface.o testHelper.o $(CFLAGS)
+
 testRandomizer: testRandomizer.c dominion.o interface.o rngs.o testHelper.o
 	gcc -o testRandomizer testRandomizer.c -g dominion.o rngs.o interface.o testHelper.o $(CFLAGS)
 
-run: rta rt1
+run: rta rt1 rt2
 	./rta &> randomtestadventurer.out
 	gcov dominion.c >> randomtestadventurer.out
 	cat dominion.c.gcov >> randomtestadventurer.out
 	./rt1 &> randomtestcard1.out
 	gcov dominion.c >> randomtestcard1.out
 	cat dominion.c.gcov >> randomtestcard1.out
+	./rt2 &> randomtestcard2.out
+	gcov dominion.c >> randomtestcard2.out
+	cat dominion.c.gcov >> randomtestcard2.out
 
 all: playdom player 
 
