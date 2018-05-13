@@ -72,7 +72,6 @@ int main(){
 			else strcat(fail, "Deck count, ");
 		}
 		// check if top deck card in hand
-		int j;
 		int* countArr = NULL;
 		countArr = calloc(treasure_map+1, sizeof(int));
 		cardInHandChange(g, &save, player, countArr, treasure_map+1, -1);
