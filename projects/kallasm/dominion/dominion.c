@@ -553,15 +553,13 @@ int drawCard(int player, struct gameState *state)
     
     //Step 1 Shuffle the discard pile back into a deck
     int i;
-    //Move discard to deck
     for (i = 0; i < state->discardCount[player];i++){
       state->deck[player][i] = state->discard[player][i];
       state->discard[player][i] = -1;
     }
 
     state->deckCount[player] = state->discardCount[player];
-    state->discardCount[player] = 0;//Reset discard
-
+    state->discardCount[player] = 0;//Reset discardj
     //Shufffle the deck
     shuffle(player, state);//Shuffle the deck up and make it so that we can draw
    
