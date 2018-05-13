@@ -30,7 +30,7 @@ rt2: randomtestcard2.c dominion.o interface.o rngs.o testHelper.o
 testRandomizer: testRandomizer.c dominion.o interface.o rngs.o testHelper.o
 	gcc -o testRandomizer testRandomizer.c -g dominion.o rngs.o interface.o testHelper.o $(CFLAGS)
 
-run: rta rt1 rt2
+runtests: rta rt1 rt2
 	./rta &> randomtestadventurer.out
 	gcov dominion.c >> randomtestadventurer.out
 	cat dominion.c.gcov >> randomtestadventurer.out
