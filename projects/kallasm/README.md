@@ -1,2 +1,4 @@
 Marti Kallas kallasm
-This is my assignment-1 submission!
+
+Assignment 4 - to make and run tests:
+make runtests
