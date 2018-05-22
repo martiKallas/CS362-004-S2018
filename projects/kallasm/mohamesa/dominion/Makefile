@@ -77,7 +77,8 @@ unittestresults.out: unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2
 	gcov dominion.c >> unittestresults.out
 	cat dominion.c.gcov >> unittestresults.out
 
-runtests: rta rt1 rt2 unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4 
+
+runtotalcov: rta rt1 rt2 unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4 
 	./rta &> randomtestadventurer.out
 	gcov dominion.c >> randomtestadventurer.out
 	cat dominion.c.gcov >> randomtestadventurer.out
@@ -98,7 +99,33 @@ runtests: rta rt1 rt2 unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest
 	gcov dominion.c >> unittestresults.out
 	cat dominion.c.gcov >> unittestresults.out
 
+runtests: 
+	make cleanCoverage
+	make rta
+	./rta &> randomtestadventurer.out
+	gcov dominion.c >> randomtestadventurer.out
+	cat dominion.c.gcov >> randomtestadventurer.out
+	rm -f *.gcov *.gcda *.gcno
+	touch dominion.c
+	make cleanCoverage
+	make rt1
+	./rt1 &> randomtestcard1.out
+	gcov dominion.c >> randomtestcard1.out
+	cat dominion.c.gcov >> randomtestcard1.out
+	rm -f *.gcov *.gcda *.gcno
+	touch dominion.c
+	make cleanCoverage
+	make rt2
+	./rt2 &> randomtestcard2.out
+	gcov dominion.c >> randomtestcard2.out
+	cat dominion.c.gcov >> randomtestcard2.out
+	make cleanCoverage
+	make unittestresults.out
+
 all: playdom player 
+
+cleanCoverage:
+	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so rta rt1 rt2 unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4
 
 clean:
 	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out rta rt1 rt2 unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4
