@@ -74,6 +74,7 @@ int main(){
 	free(countArr);
 	countArr = calloc(treasure_map+1, sizeof(int));
 	cardInDiscardChange(game, &saveState, currentPlayer, countArr, treasure_map+1, -1);
+	ok = 0;
 	if (countArr[feast] != 1){
 		printf("  FAIL: Feast change in discard was %d.\n", countArr[feast]);
 		passed = 0;
