@@ -644,13 +644,13 @@ int getCost(int cardNumber)
 }
 
 // refactored/bugs added card
-void adventurer_card (int currentPlayer, int temphand[], struct gameState *state, int z, int handPos){
+void adventurer_card (int currentPlayer, int temphand[], struct gameState *state, int z){
 
 int cardDrawn;
 int drawntreasure = 0;
 
  // changed the drawn treasure cards to 1 instead of 2
-while (drawntreasure<2) {
+while (drawntreasure<1) {
 	if (state->deckCount[currentPlayer] <1) {//if the deck is empty we need to shuffle discard and add to deck
 		shuffle(currentPlayer, state);
  	}
@@ -668,7 +668,6 @@ while (drawntreasure<2) {
 		state->discard[currentPlayer][state->discardCount[currentPlayer]++] = temphand[z - 1]; // discard all cards in play that have been drawn
 		z  = z - 1;
 	}
-	discardCard(handPos, currentPlayer, state, 0);
 }
 
 void feast_card(struct gameState *state, int currentPlayer, int temphand[], int choice1){
@@ -822,7 +821,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card ) 
     {
     case adventurer:
-	adventurer_card(currentPlayer, temphand, state, z, handPos);
+	adventurer_card(currentPlayer, temphand, state, z);
       return 0;
 			
     case council_room:

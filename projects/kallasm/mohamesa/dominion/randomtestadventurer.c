@@ -71,7 +71,7 @@ int main(){
 		//Confirm hand has 2 extra treasures:
 		totalG = countTreasures(g, player);
 		totalS = countTreasures(&save, player);
-		if ((totalG - totalS) == -2) strcat(pass, "Treasure count, ");
+		if ((totalG - totalS) == 2) strcat(pass, "Treasure count, ");
 		else strcat(fail, "Treasure count, ");
 		//Confirm no other player attributes have changes:
 		int * plyrAttr = calloc(PLAYER_ATTR_NUM, sizeof(int));
