@@ -46,37 +46,44 @@ public class AutoTester {
         lengths[4] = fragment.length;
     }
 
-    public TestPair[] schemes = {
+    public TestPair [] schemes = {
             new TestPair("http:", true),
             new TestPair("", false),
             new TestPair("ht!tp:", false),
             new TestPair("1http:", false),
-            new TestPair("http", false)
+            new TestPair("http", false),
+            new TestPair("ftp:", true),
+            new TestPair("h3t:", true)
     };
 
-    public TestPair[] authority = {
+    public TestPair [] authority = {
             new TestPair( "//google.com", true),
             new TestPair( "", false),
             new TestPair( "//google[.com", false),
             new TestPair( "//google.com::8000", false),
-            new TestPair("/google.com", false)
+            new TestPair("/google.com", false),
+            new TestPair("//127.0.0.1", true),
+            new TestPair("//256.0.0.1", false),
+            new TestPair("com", false)
     };
 
-    public TestPair[] path = {
+    public TestPair [] path = {
             new TestPair("/home.html", true),
             new TestPair("", true),
             new TestPair("/^", false),
-            new TestPair("//home.html", false)
+            new TestPair("//home.html", false),
+            new TestPair("/..", false),
+            new TestPair("/file/one", true)
     };
 
-    public TestPair[] query = {
+    public TestPair [] query = {
             new TestPair("?name=MickeyMouse", true),
             new TestPair("", true),
             new TestPair("?name=Mickey&title=Mouse", true),
             new TestPair("[?name=MickeyMouse", false)
     };
 
-    public TestPair[] fragment = {
+    public TestPair [] fragment = {
             new TestPair("#description", true),
             new TestPair("", true)
     };

@@ -138,10 +138,22 @@ public class UrlValidatorTest extends TestCase {
        next = autoTester.getNextTestPair();
        int failures = 0;;
        while(next != null){
-           boolean result = validator.isValid(next.toString());
-           if (result != next.isValid()){
+           try {
+               boolean result = validator.isValid(next.toString());
+               if (result != next.isValid()) {
+                   System.out.println("Fail on URL: " + next.toString());
+                   System.out.println("\tisValid: " + result + ". Expected: " + next.isValid());
+                   failures++;
+               }
+           }
+           catch(ExceptionInInitializerError e){
                System.out.println("Fail on URL: " + next.toString());
-               System.out.println("\tisValid: " + result + ". Expected: " + next.isValid());
+               System.out.println("\tExceptionInInitializerError should not occur");
+               failures++;
+           }
+           catch(NoClassDefFoundError f){
+               System.out.println("Fail on URL: " + next.toString());
+               System.out.println("\tNoClassDefFoundError exception should not occur");
                failures++;
            }
            next = autoTester.getNextTestPair();
