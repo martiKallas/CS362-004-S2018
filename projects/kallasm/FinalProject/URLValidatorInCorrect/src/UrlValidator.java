@@ -340,7 +340,6 @@ public class UrlValidator implements Serializable {
         if (!isValidFragment(urlMatcher.group(PARSE_URL_FRAGMENT))) {
             return false;
         }
-
         return true;
     }
 
@@ -357,12 +356,10 @@ public class UrlValidator implements Serializable {
         if (scheme == null) {
             return false;
         }
-
         // TODO could be removed if external schemes were checked in the ctor before being stored
         if (!SCHEME_PATTERN.matcher(scheme).matches()) {
             return false;
         }
-
         if (isOff(ALLOW_ALL_SCHEMES) && !allowedSchemes.contains(scheme.toLowerCase(Locale.ENGLISH))) {
             return false;
         }
