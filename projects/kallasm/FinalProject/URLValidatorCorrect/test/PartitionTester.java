@@ -4,7 +4,6 @@ public class PartitionTester {
     private int pathIndex = 0;
     private int queryIndex = 0;
     private int fragmentIndex = 0;
-
     public TestPair [] schemes = {
             new TestPair("http:", true),
             new TestPair("", false),
